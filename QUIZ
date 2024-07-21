@@ -1,0 +1,83 @@
+mport random
+
+def create_quiz():
+  """Creates a new quiz with customizable questions, answers, and scoring."""
+
+  quiz_title = input("Enter the title of the quiz: ")
+  num_questions = int(input("Enter the number of questions: "))
+
+  questions = []
+  for i in range(num_questions):
+    question = input(f"Enter question {i+1}: ")
+    options = []
+    for j in range(2):
+      option = input(f"Enter option {chr(ord('A') + j)}: ")
+      options.append(option)
+    correct_answer = input("Enter the correct answer (A or B): ").upper()
+    questions.append({
+      "question": question,
+      "options": options,
+      "correct_answer": correct_answer
+    })
+
+  return quiz_title, questions
+
+def take_quiz(quiz_title, questions):
+  """Presents the quiz to the user and calculates the score."""
+
+  print(f"\n----- {quiz_title} -----\n")
+  score = 0
+
+  for i, question_data in enumerate(questions):
+    print(f"Question {i+1}: {question_data['question']}")
+    for j, option in enumerate(question_data['options']):
+      print(f"{chr(ord('A') + j)}. {option}")
+    user_answer = input("Enter your answer (A or B): ").upper()
+    if user_answer == question_data['correct_answer']:
+      print("Correct!")
+      score += 1
+    else:
+      print(f"Incorrect. The correct answer was {question_data['correct_answer']}.")
+
+  print(f"\nYou got {score} out of {len(questions)} questions correct!")
+  print(f"Your score: {score / len(questions) * 100:.2f}%")
+
+def main():
+  """Main function to run the quiz platform."""
+
+  while True:
+    print("\n--- Quiz Platform ---")
+    print("1. Create a new quiz")
+    print("2. Take a quiz")
+    print("3. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == '1':
+      quiz_title, questions = create_quiz()
+      print(f"\nQuiz '{quiz_title}' created successfully!")
+
+    elif choice == '2':
+      quizzes = []  # Placeholder for future quiz storage
+      if quizzes:
+        quiz_names = [quiz['title'] for quiz in quizzes]
+        print("\nAvailable quizzes:")
+        for i, quiz_name in enumerate(quiz_names):
+          print(f"{i+1}. {quiz_name}")
+        quiz_choice = int(input("Enter the number of the quiz you want to take: ")) - 1
+        if 0 <= quiz_choice < len(quiz_names):
+          quiz = quizzes[quiz_choice]
+          take_quiz(quiz['title'], quiz['questions'])
+        else:
+          print("Invalid quiz selection.")
+      else:
+        print("No quizzes available. Please create a quiz first.")
+
+    elif choice == '3':
+      print("Exiting the quiz platform. Goodbye!")
+      break
+    else:
+      print("Invalid choice.")
+
+if __name__ == "__main__":
+  main()
